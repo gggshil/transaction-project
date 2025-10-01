@@ -3,6 +3,7 @@ import 'package:hello_world/usernameprovider.dart';
 import 'package:provider/provider.dart';
 import 'bottomnavbar.dart';
 import 'transaction_provider.dart';
+import 'login_page.dart';
 
 
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Bottomnavbar(),
+          home:Loginpage(),
           
           
         
