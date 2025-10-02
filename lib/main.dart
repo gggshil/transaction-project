@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/usernameprovider.dart';
 import 'package:provider/provider.dart';
-import 'bottomnavbar.dart';
 import 'transaction_provider.dart';
 import 'login_page.dart';
 

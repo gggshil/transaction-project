@@ -34,7 +34,7 @@ class TransactionProvider with ChangeNotifier {
 
   Future<void> addTransaction(TransactionModel transaction) async{
     final response = await http.post(
-      Uri.parse("$baseUrl"),
+      Uri.parse(baseUrl),
       headers: {"Content-Type":"application/json"},
       body: jsonEncode({
         "title": transaction.title,

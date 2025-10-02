@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bottomnavbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
@@ -8,6 +12,56 @@ class Loginpage extends StatefulWidget {
 }
 
 class LoginPageState extends State<Loginpage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  bool _isLoading = false;
+  String errorMessage = "";
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+      errorMessage = "";
+    });
+
+
+    final url = Uri.parse("https://dummyjson.com/auth/login");
+    try{
+    final response = await http.post(
+      url,
+      headers: {"Content-Type":"application/json"},
+      body : jsonEncode({
+        "username" : usernameController.text.trim(),
+        "password" : passwordController.text.trim()
+      }),
+      );
+
+
+      if (response.statusCode ==200) {
+
+        final data = jsonDecode(response.body);
+
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // // await prefs.setString("auth_token", data["token"]);
+        // await prefs.setString("username", data["username"]);
+
+       Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+      );
+      }else{
+        setState(() {
+          errorMessage = "Invalid Username or Password";
+       } );
+      }
+  } catch (e) {
+      setState(() {
+        errorMessage = "Error: $e";
+      });
+    } 
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,6 +96,7 @@ class LoginPageState extends State<Loginpage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
+                  controller: usernameController,
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     hintText: "Enter your name",
@@ -57,6 +112,7 @@ class LoginPageState extends State<Loginpage> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
+                  controller: passwordController,
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     hintText: "Password",
@@ -79,12 +135,7 @@ class LoginPageState extends State<Loginpage> {
                       width: 100,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Bottomnavbar(),
-                            ),
-                          );
+                          _login();
                         },
                         child: Text("Login"),
                       ),
@@ -106,5 +157,6 @@ class LoginPageState extends State<Loginpage> {
         ),
       ),
     );
+      }
+
   }
-}
