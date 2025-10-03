@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/login_page.dart';
 import 'package:provider/provider.dart';
 import 'balance_card.dart';
 import 'insights_widget.dart';
@@ -6,7 +7,6 @@ import 'recent_text.dart';
 import 'transaction_provider.dart';
 import 'alertbox.dart';
 import 'usernameprovider.dart';
-import 'username_popup.dart';
 import 'editalertbox.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,16 +56,22 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(context: context, builder: (_) => UsernamePopup());
-            },
-            icon: const Icon(Icons.face, color: Colors.white),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     showDialog(context: context, builder: (_) => UsernamePopup());
+          //   },
+          //   icon: const Icon(Icons.face, color: Colors.white),
+          // ),
           IconButton(
             onPressed: () => showAddTransactionDialog(context),
             icon: const Icon(Icons.add, color: Colors.white, size: 35),
           ),
+          IconButton(onPressed: (){
+            Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => Loginpage())
+            );
+          },
+           icon: Icon(Icons.logout,color: Colors.white,size: 28,))
         ],
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
