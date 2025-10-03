@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/homepage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'bottomnavbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -15,52 +13,32 @@ class LoginPageState extends State<Loginpage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  bool _isLoading = false;
-  String errorMessage = "";
-
-  Future<void> _login() async {
-    setState(() {
-      _isLoading = true;
-      errorMessage = "";
-    });
-
-
+  Future<void> _login(context) async {
     final url = Uri.parse("https://dummyjson.com/auth/login");
-    try{
-    final response = await http.post(
-      url,
-      headers: {"Content-Type":"application/json"},
-      body : jsonEncode({
-        "username" : usernameController.text.trim(),
-        "password" : passwordController.text.trim()
-      }),
+    
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "username": usernameController.text,
+          "password": passwordController.text,
+        }),
       );
 
-
-      if (response.statusCode ==200) {
-
-        final data = jsonDecode(response.body);
-
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // // await prefs.setString("auth_token", data["token"]);
-        // await prefs.setString("username", data["username"]);
-
-       Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Bottomnavbar()),
-      );
-      }else{
-        setState(() {
-          errorMessage = "Invalid Username or Password";
-       } );
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+        );
+      
       }
-  } catch (e) {
-      setState(() {
-        errorMessage = "Error: $e";
-      });
-    } 
+      else if(response.statusCode == 400){
+        ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(content: Text("Wrong username or password",style: TextStyle(color: Colors.red),)),
+);
+      }
+    
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +113,7 @@ class LoginPageState extends State<Loginpage> {
                       width: 100,
                       child: ElevatedButton(
                         onPressed: () {
-                          _login();
+                          _login(context);
                         },
                         child: Text("Login"),
                       ),
@@ -157,6 +135,5 @@ class LoginPageState extends State<Loginpage> {
         ),
       ),
     );
-      }
-
   }
+}
