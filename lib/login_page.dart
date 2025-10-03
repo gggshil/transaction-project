@@ -3,6 +3,9 @@ import 'bottomnavbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+bool hide = true;
+bool isLoading = false;
+
 class Loginpage extends StatefulWidget {
   const Loginpage({super.key});
   @override
@@ -15,32 +18,32 @@ class LoginPageState extends State<Loginpage> {
 
   Future<void> _login(context) async {
     final url = Uri.parse("https://dummyjson.com/auth/login");
-    
-      final response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "username": usernameController.text,
-          "password": passwordController.text,
-        }),
-      );
 
-      if (response.statusCode == 200) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Bottomnavbar()),
-          
-        );
-      
-      }
-      else if(response.statusCode == 400){
-        ScaffoldMessenger.of(context).showSnackBar(
-  SnackBar(content: Text("Wrong username or password",style: TextStyle(color: Colors.red),)),
-);
-      }
-    
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "username": usernameController.text,
+        "password": passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Bottomnavbar()),
+      );
+    } else if (response.statusCode == 400) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Wrong username or password",
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      );
+    }
   }
- 
 
   @override
   Widget build(BuildContext context) {
@@ -93,8 +96,17 @@ class LoginPageState extends State<Loginpage> {
                 padding: const EdgeInsets.all(20.0),
                 child: TextField(
                   controller: passwordController,
+                  obscureText: hide,
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          hide = !hide;
+                        });
+                      },
+                      icon: Icon(Icons.remove_red_eye),
+                    ),
                     hintText: "Password",
                     hintStyle: TextStyle(color: Colors.grey),
                     filled: true,
@@ -114,11 +126,21 @@ class LoginPageState extends State<Loginpage> {
                       height: 50,
                       width: 100,
                       child: ElevatedButton(
-                        onPressed: () {
-                          _login(context);
-                          
+                        onPressed: () async {
+                          if (!isLoading) {
+                            setState(() {
+                              isLoading = true;
+                            });
+                             _login(context);
+                          } else {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
                         },
-                        child: Text("Login"),
+                        child: isLoading
+                            ?  CircularProgressIndicator()
+                            : const Text("Login"),
                       ),
                     ),
                   ),
