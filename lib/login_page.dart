@@ -16,7 +16,7 @@ class LoginPageState extends State<Loginpage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Future<void> _login(context) async {
+  Future<void> _login() async {
     final url = Uri.parse("https://dummyjson.com/auth/login");
 
     final response = await http.post(
@@ -131,7 +131,7 @@ class LoginPageState extends State<Loginpage> {
                             setState(() {
                               isLoading = true;
                             });
-                             _login(context);
+                             _login();
                           } else {
                             setState(() {
                               isLoading = false;

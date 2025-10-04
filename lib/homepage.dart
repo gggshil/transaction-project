@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/login_page.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'balance_card.dart';
 import 'insights_widget.dart';
 import 'recent_text.dart';
 import 'transaction_provider.dart';
 import 'alertbox.dart';
-import 'usernameprovider.dart';
 import 'editalertbox.dart';
+import 'userdetails.dart';
+
+String username = "Hilya";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionProvider>().transactions;
-    final title = context.watch<TitleProvider>().title;
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +44,7 @@ class _HomePageState extends State<HomePage> {
             backgroundImage: NetworkImage(
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6E0VfYZjIFiR6Dq-oAiLinfrjJyuV-WpcQ&s',
             ),
+            
           ),
         ),
         flexibleSpace: Container(
@@ -73,22 +77,30 @@ class _HomePageState extends State<HomePage> {
           },
            icon: Icon(Icons.logout,color: Colors.white,size: 28,))
         ],
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Hello $title !",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        title: InkWell(
+          onTap:(){
+            Navigator.pushReplacement(context,
+             MaterialPageRoute(builder:(context) => Userdetails())
+             );
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Hello  $username !",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                
               ),
-            ),
-            Text(
-              "Welcome back",
-              style: TextStyle(fontSize: 12, color: Colors.white),
-            ),
-          ],
+              Text(
+                "Welcome back",
+                style: TextStyle(fontSize: 12, color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
       body: SingleChildScrollView(

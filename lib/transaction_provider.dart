@@ -1,13 +1,14 @@
 
 
 import 'dart:convert';
+import 'package:hello_world/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'transaction_model.dart';
-
+final String baseUrl = "http://192.168.1.94:4000/transactions";
 
 class TransactionProvider with ChangeNotifier {
-  final String baseUrl = "http://192.168.1.94:4000/transactions";
+  
   final List<TransactionModel> _transactions = [];
 
 
@@ -82,3 +83,5 @@ if (response.statusCode == 200) {
 }
 
 }
+
+
