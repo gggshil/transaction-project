@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bottomnavbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -29,6 +30,10 @@ class LoginPageState extends State<Loginpage> {
     );
 
     if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final username = data['username'];
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('username', username);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Bottomnavbar()),
@@ -43,6 +48,9 @@ class LoginPageState extends State<Loginpage> {
         ),
       );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override

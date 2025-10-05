@@ -1,7 +1,9 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:hello_world/homepage.dart';
 import 'bottomnavbar.dart';
+import 'login_page.dart';
 
 
 
@@ -74,7 +76,7 @@ class Userdetailspage extends State<Userdetails> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top:5 ,bottom: 5),
-                  child: Text("Username :username",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                  child: Text("Username :$username",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 5,bottom: 5),

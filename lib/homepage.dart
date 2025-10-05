@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/login_page.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'balance_card.dart';
 import 'insights_widget.dart';
 import 'recent_text.dart';
@@ -10,7 +10,7 @@ import 'alertbox.dart';
 import 'editalertbox.dart';
 import 'userdetails.dart';
 
-String username = "Hilya";
+String username = "Guest";
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,12 +22,23 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    loadUsername();
     Future.microtask(
       () => Provider.of<TransactionProvider>(
         context,
         listen: false,
       ).fetchTransactions(),
     );
+  }
+
+
+  Future<void> loadUsername()async{
+    final prefs = await SharedPreferences.getInstance();
+    final storedUsername = prefs.getString("username");
+
+    setState(() {
+      username = storedUsername ?? "Guest";
+    });
   }
 
   @override
