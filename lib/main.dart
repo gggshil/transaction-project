@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
     return   MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TransactionProvider()),
-        ChangeNotifierProvider(create: (_) => TitleProvider(),),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -34,4 +33,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

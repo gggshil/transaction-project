@@ -43,9 +43,9 @@
     {
       "id": "80ff",
       "title": "Whatsapp payment",
-      "subtitle": "",
-      "price": "20$",
+      "subtitle": "payment",
       "date": "1/10/2025",
+      "price": "$20",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJCXHUHLcHEK1YfnI5LoabzhIzSfWAZHDtnw&s"
     }
   ]
