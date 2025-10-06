@@ -31,8 +31,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
-  Future<void> loadUsername()async{
+  Future<void> loadUsername() async {
     final prefs = await SharedPreferences.getInstance();
     final storedUsername = prefs.getString("username");
 
@@ -44,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final transactions = context.watch<TransactionProvider>().transactions;
-    
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +53,6 @@ class _HomePageState extends State<HomePage> {
             backgroundImage: NetworkImage(
               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN6E0VfYZjIFiR6Dq-oAiLinfrjJyuV-WpcQ&s',
             ),
-            
           ),
         ),
         flexibleSpace: Container(
@@ -81,18 +78,22 @@ class _HomePageState extends State<HomePage> {
             onPressed: () => showAddTransactionDialog(context),
             icon: const Icon(Icons.add, color: Colors.white, size: 35),
           ),
-          IconButton(onPressed: (){
-            Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => Loginpage())
-            );
-          },
-           icon: Icon(Icons.logout,color: Colors.white,size: 28,))
+          IconButton(
+            onPressed: () async {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Loginpage()),
+              );
+            },
+            icon: Icon(Icons.logout, color: Colors.white, size: 28),
+          ),
         ],
         title: InkWell(
-          onTap:(){
-            Navigator.pushReplacement(context,
-             MaterialPageRoute(builder:(context) => Userdetails())
-             );
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Userdetails()),
+            );
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +105,6 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
-                
               ),
               Text(
                 "Welcome back",
@@ -138,10 +138,10 @@ class _HomePageState extends State<HomePage> {
                         child: Icon(Icons.delete, color: Colors.red),
                       ),
                     ),
-                    onDismissed: (direction)async {
+                    onDismissed: (direction) async {
                       await Provider.of<TransactionProvider>(
                         context,
-                        listen: false, 
+                        listen: false,
                       ).deleteTransaction(tx.id);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("${tx.title} deleted")),

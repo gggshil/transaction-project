@@ -3,19 +3,25 @@ import 'package:hello_world/usernameprovider.dart';
 import 'package:provider/provider.dart';
 import 'transaction_provider.dart';
 import 'login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'bottomnavbar.dart';
 
 
 
 
+void main()async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
+  final prefs = await SharedPreferences.getInstance();
+  final token = prefs.getString('accessToken');
   runApp(
-     MyApp(),
+     MyApp(token: token,),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? token;
+  const MyApp({super.key,this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home:Loginpage(),
+          home:token == null? const Loginpage(): const Bottomnavbar(),
           
           
         

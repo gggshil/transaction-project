@@ -14,8 +14,12 @@ class Loginpage extends StatefulWidget {
 }
 
 class LoginPageState extends State<Loginpage> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController(
+    text: "emilys",
+  );
+  final TextEditingController passwordController = TextEditingController(
+    text: "emilyspass",
+  );
 
   Future<void> _login() async {
     final url = Uri.parse("https://dummyjson.com/auth/login");
@@ -31,9 +35,18 @@ class LoginPageState extends State<Loginpage> {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final username = data['username'];
+      final token = data['accessToken'];
+
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('username', username);
+      await prefs.setString('accessToken', token);
+
+      if (token != null) {
+        final response = await http.get(
+          Uri.parse("https://dummyjson.com/auth/me"),
+          headers: {"Authorization": "Bearer $token"},
+        );
+      }
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Bottomnavbar()),
@@ -139,7 +152,7 @@ class LoginPageState extends State<Loginpage> {
                             setState(() {
                               isLoading = true;
                             });
-                             _login();
+                            _login();
                           } else {
                             setState(() {
                               isLoading = false;
@@ -147,7 +160,7 @@ class LoginPageState extends State<Loginpage> {
                           }
                         },
                         child: isLoading
-                            ?  CircularProgressIndicator()
+                            ? CircularProgressIndicator()
                             : const Text("Login"),
                       ),
                     ),
